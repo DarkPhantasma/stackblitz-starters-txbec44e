@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Juego Fast Check – Reinformados Chile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Ayuda a derrotar a la baba de la desinformación clasificando noticias como Reales, Engañosas o Falsas." />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="game-root">
+        <!-- PANTALLA INICIO -->
+        <section id="screen-start" class="screen screen-active">
+            <div class="start-card">
+                <img src="assets/logo-fastcheck.png" alt="Fast Check CL" class="logo-main" />
+
+                <h1 class="game-title">Reinformados Chile</h1>
+                <p class="game-subtitle">
+                    Derrota a la <span class="highlight">baba de la desinformación</span> clasificando noticias como
+                    <strong>Reales</strong>, <strong>Engañosas</strong> o <strong>Falsas</strong>.
+                </p>
+
+                <button id="btn-start" class="btn btn-primary btn-big">Comenzar</button>
+
+                <p class="credits">
+                    Un proyecto de Fast Check CL · Inspirado en Reinformados (la diaria)
+                </p>
+            </div>
+        </section>
+
+        <!-- PANTALLA INTRO (DIÁLOGOS) -->
+        <section id="screen-intro" class="screen">
+            <div class="intro-layout">
+                <div class="dialog-bubble">
+                    <p id="intro-dialog-text"></p>
+                    <div class="dialog-name" id="intro-character-name"></div>
+                </div>
+                <div class="intro-character">
+                    <img id="intro-character-img" src="assets/nona.png" alt="Personaje" />
+                </div>
+            </div>
+            <div class="intro-next">
+                <button id="btn-next-dialog" class="btn btn-ghost">▶</button>
+            </div>
+        </section>
+
+        <!-- PANTALLA REGLAS -->
+        <section id="screen-rules" class="screen">
+            <div class="panel neon-panel">
+                <h2 class="panel-title">¿Cómo se juega?</h2>
+                <ul class="rules-list">
+                    <li>Leerás una noticia breve en cada ronda.</li>
+                    <li>Elige si es <strong>Real</strong>, <strong>Engañosa</strong> o <strong>Falsa</strong>.</li>
+                    <li>Si aciertas, dañarás a la baba. Si fallas, la baba se ríe de ti.</li>
+                    <li>Luego responde una pregunta de reflexión para afinar tu radar.</li>
+                </ul>
+                <button id="btn-go-to-game" class="btn btn-primary btn-big">¡Entendido, jugar!</button>
+            </div>
+        </section>
+
+        <!-- PANTALLA DE JUEGO -->
+        <section id="screen-game" class="screen">
+            <header class="top-bar">
+                <div class="top-left">
+                    <img src="assets/logo-fastcheck-mini.png" alt="" class="logo-mini" />
+                </div>
+                <div class="top-center" id="round-indicator">Ronda 1/5</div>
+                <div class="top-right">
+                    Puntaje: <span id="score-label">0</span>
+                </div>
+            </header>
+
+            <div class="game-layout">
+                <!-- Panel de noticia -->
+                <div class="panel panel-news neon-panel">
+                    <h2 id="news-title" class="news-title"></h2>
+                    <p id="news-text" class="news-body"></p>
+                    <p id="news-source" class="news-source"></p>
+
+                    <div class="choices">
+                        <button class="btn btn-choice" data-choice="real">Real</button>
+                        <button class="btn btn-choice" data-choice="enganoso">Engañosa</button>
+                        <button class="btn btn-choice" data-choice="falso">Falsa</button>
+                    </div>
+                </div>
+
+                <!-- Panel de baba lateral (decorativo) -->
+                <div class="panel panel-baba neon-panel">
+                    <div class="baba-side-wrapper">
+                        <img id="baba-side-img" src="assets/baba-neutral.png" alt="Baba" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANTALLA FEEDBACK -->
+        <section id="screen-feedback" class="screen">
+            <div class="panel panel-feedback neon-panel">
+                <h2 id="feedback-title" class="panel-title"></h2>
+                <p id="feedback-text" class="feedback-text"></p>
+
+                <p id="reflection-question" class="reflection-question"></p>
+                <div id="reflection-options" class="reflection-options"></div>
+
+                <button id="btn-next-question" class="btn btn-primary btn-next" disabled>
+          Siguiente noticia
+        </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA FINAL -->
+        <section id="screen-end" class="screen">
+            <div class="panel panel-end neon-panel">
+                <h2 class="panel-title">Resultado final</h2>
+
+                <p class="final-score-text">
+                    Puntaje obtenido: <span id="final-score" class="final-score"></span>
+                </p>
+                <p id="final-message" class="final-message"></p>
+
+                <!-- Tabla de resultados -->
+                <div class="results-wrapper">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Noticia</th>
+                                <th>Clasificación correcta</th>
+                                <th>Tu respuesta</th>
+                                <th>Acierto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-body">
+                            <!-- filas generadas por JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="final-actions">
+                    <button id="btn-restart" class="btn btn-primary btn-big">Volver a jugar</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- OVERLAY: ANIMACIÓN DE LA BABA -->
+    <div id="baba-overlay" class="baba-overlay">
+        <div class="baba-overlay-inner">
+            <img id="baba-overlay-img" src="assets/baba-neutral.png" alt="Baba" />
+            <div id="baba-overlay-text" class="baba-overlay-text"></div>
+        </div>
+    </div>
+
+    <!-- AUDIO -->
+    <audio id="sound-correct" src="assets/correct.mp3" preload="auto"></audio>
+    <audio id="sound-wrong" src="assets/wrong.mp3" preload="auto"></audio>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
